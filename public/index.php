@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . "/auth_session.php";
 header("Content-Type: text/html; charset=UTF-8");
 ?>
 <!doctype html>
