@@ -16,7 +16,7 @@ header("Content-Type: text/html; charset=UTF-8");
         <li><a href="/users">GET /users</a></li>
         <li><a href="/articles">GET /articles</a></li>
     </ul>
-    <p>Admin site coming soon...</p>
+    <p><a href="/admin">Admin Site</a></p>
 </body>
 
 </html>
