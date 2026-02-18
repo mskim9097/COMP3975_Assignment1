@@ -35,7 +35,7 @@ try {
                     <?php foreach ($articles as $article): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center" data-id="<?= $article['id'] ?>">
                         <span class="title"><?= htmlspecialchars($article['title']) ?></span>
-                        <button class="btn btn-sm btn-danger" onclick="deleteArticle(event, <?= $article['id'] ?>)">X</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="deleteArticle(event, <?= $article['id'] ?>)">delete</button>
                     </li>
                     <?php endforeach; ?>
                 </ul>
@@ -44,8 +44,8 @@ try {
             <div class="col-md-9">
                 <input type="text" id="title" class="form-control mb-3" placeholder="Article Title">
                 <div id="editor"></div>
-                <button class="btn btn-primary mt-3" onclick="saveArticle()">Save</button>
-                <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='/logout.php'">Logout</button>
+                <button class="btn btn-outline-secondary mt-3" onclick="saveArticle()">Save</button>
+                <button type="button" class="btn btn-outline-secondary  mt-3" onclick="window.location.href='/logout.php'">Logout</button>
                     </div>
         </div>
     </div>  
@@ -103,7 +103,7 @@ try {
 
         function updateActiveState(id) {
             document.querySelectorAll('#articleList li').forEach(li => {
-                li.classList.toggle('active', li.dataset.id == id);
+                li.classList.toggle('bg-secondary-subtle', li.dataset.id == id);
             });
         }
 
