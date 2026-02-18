@@ -26,7 +26,13 @@ try {
 </head>
 <body>
     <div class="container py-4">
-        <h1>Admin - Mini CMS</h1>
+    <h1 class="d-flex justify-content-between align-items-center">
+  <span>Admin - Mini CMS</span>
+  <button type="button" class="btn btn-outline-secondary btn-sm"
+          onclick="window.location.href='/logout.php'">
+    Logout
+  </button>
+</h1>
         <p><a href="/">Back to Home</a></p>
         <div class="row">
             <div class="col-md-3">
@@ -41,11 +47,10 @@ try {
                 </ul>
                 <button class="btn btn-secondary w-100" onclick="newArticle()">New Article</button>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9">  
                 <input type="text" id="title" class="form-control mb-3" placeholder="Article Title">
                 <div id="editor"></div>
                 <button class="btn btn-outline-secondary mt-3" onclick="saveArticle()">Save</button>
-                <button type="button" class="btn btn-outline-secondary  mt-3" onclick="window.location.href='/logout.php'">Logout</button>
                     </div>
         </div>
     </div>  
