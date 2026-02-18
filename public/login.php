@@ -4,7 +4,7 @@ declare(strict_types=1);
 session_start();
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: /index.php");
+    header("location: /admin.php");
     exit;
 }
 
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["id"] = (int)$user["id"];
                 $_SESSION["email"] = (string)$user["email"];
 
-                header("location: /index.php");
+                header("location: /admin.php");
                 exit;
             }
 
@@ -64,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta charset="utf-8">
   <title>Admin Login</title>
 </head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <body>
   <h1>Admin Login</h1>
 
@@ -74,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"], ENT_QUOTES, "UTF-8"); ?>" method="post">
     <div>
       <label>Email</label><br>
-      <input type="email" name="email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, "UTF-8"); ?>">
+      <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email, ENT_QUOTES, "UTF-8"); ?>">
       <div style="color:red;"><?php echo htmlspecialchars($email_err, ENT_QUOTES, "UTF-8"); ?></div>
     </div>
 
@@ -82,13 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div>
       <label>Password</label><br>
-      <input type="password" name="password">
+      <input type="password" name="password" class="form-control">
       <div style="color:red;"><?php echo htmlspecialchars($password_err, ENT_QUOTES, "UTF-8"); ?></div>
     </div>
 
     <br>
 
-    <button type="submit">Login</button>
+    <button type="submit" class="btn btn-primary">Login</button>
   </form>
 </body>
 </html>

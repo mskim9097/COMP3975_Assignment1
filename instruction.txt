@@ -1,3 +1,65 @@
+### Setup ###
 docker compose down -v
 docker compose up -d --build
 docker compose exec website php setup.php
+
+### Seed Account info###
+Email: a@a.a
+Password: P@$$w0rd
+
+### REST API TEST ###
+
+1. For User Table
+1-1. READ
+GET http://localhost:8080/users
+GET http://localhost:8080/users/1
+
+1-2. CREATE
+POST http://localhost:8080/users
+Body
+raw: Json
+{
+  "email": "test1@test.com",
+  "password": "1234"
+}
+GET http://localhost:8080/users/
+
+1-3. UPDATE
+PUT http://localhost:8080/users/1
+Body
+raw: Json
+{
+  "email": "test1_changed@test.com",
+  "password": "9999"
+}
+GET http://localhost:8080/users/1
+
+1-4. DETELE
+DELETE http://localhost:8080/users/2
+
+2. For Articles Table
+
+1-1. CREATE
+POST http://localhost:8080/articles
+Body → raw → JSON
+{
+  "title": "Test Article 1",
+  "content": "This is the first test article."
+}
+
+2-2. READ
+GET http://localhost:8080/articles
+GET http://localhost:8080/articles/1
+
+2-3. UPDATE
+PUT http://localhost:8080/articles/1
+Body → raw → JSON
+{
+  "title": "Test Article 1 (Updated)",
+  "content": "Updated content here."
+}
+
+GET http://localhost:8080/articles/1
+
+2-4. DELETE
+DELETE http://localhost:8080/articles/1

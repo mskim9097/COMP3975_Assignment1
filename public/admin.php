@@ -1,5 +1,6 @@
 <?php
 header("Content-Type: text/html; charset=UTF-8");
+require_once __DIR__ . "/auth_session.php";
 require_once __DIR__ . '/../src/System/DatabaseConnector.php';
 use Src\System\DatabaseConnector;
 
@@ -44,9 +45,10 @@ try {
                 <input type="text" id="title" class="form-control mb-3" placeholder="Article Title">
                 <div id="editor"></div>
                 <button class="btn btn-primary mt-3" onclick="saveArticle()">Save</button>
-            </div>
+                <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='/logout.php'">Logout</button>
+                    </div>
         </div>
-    </div>
+    </div>  
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         var quill = new Quill('#editor', {
