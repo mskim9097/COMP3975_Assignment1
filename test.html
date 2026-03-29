@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>CORS Test</h2>
+
+<button onclick="testGet()">GET Test</button>
+<button onclick="testPost()">POST Test</button>
+
+<script>
+function testGet() {
+  fetch("http://localhost:8080/users")
+    .then(res => res.json())
+    .then(data => console.log("GET success:", data))
+    .catch(err => console.error("GET error:", err));
+}
+
+function testPost() {
+  fetch("http://localhost:8080/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: "test@test.com",
+      password: "1234"
+    })
+  })
+  .then(res => res.text())
+  .then(data => console.log("POST success:", data))
+  .catch(err => console.error("POST error:", err));
+}
+</script>
+
+</body>
+</html>

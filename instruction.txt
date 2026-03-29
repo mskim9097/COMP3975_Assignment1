@@ -1,5 +1,8 @@
 ### Setup ###
-docker compose down -v
+Run the following commands ONE BY ONE (do not run them together):
+
+rm -f cms-db.sqlite
+docker compose down
 docker compose up -d --build
 docker compose exec website php setup.php
 
@@ -22,17 +25,17 @@ raw: Json
   "email": "test1@test.com",
   "password": "1234"
 }
-GET http://localhost:8080/users/
+GET http://localhost:8080/users
 
 1-3. UPDATE
-PUT http://localhost:8080/users/1
+PUT http://localhost:8080/users/2
 Body
 raw: Json
 {
   "email": "test1_changed@test.com",
   "password": "9999"
 }
-GET http://localhost:8080/users/1
+GET http://localhost:8080/users/2
 
 1-4. DETELE
 DELETE http://localhost:8080/users/2
@@ -63,3 +66,24 @@ GET http://localhost:8080/articles/1
 
 2-4. DELETE
 DELETE http://localhost:8080/articles/1
+
+### CORS TEST (restricted to GET)
+
+1. Open a browser and go to:
+   http://localhost:8080/users
+
+   → Should return data (GET works)
+
+2. To test CORS restriction:
+
+   Open test.html in a browser 
+   (e.g., double-click the file or use VS Code Live Server)
+
+   Click the POST button.
+
+   → Should return 405 or be blocked (POST is restricted)
+
+3. Note:
+   - GET requests are allowed from browser
+   - POST/PUT/DELETE are restricted via CORS
+   - All methods still work in Postman

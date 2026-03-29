@@ -5,19 +5,13 @@ class DatabaseConnector {
     private $dbConnection = null;
 
     public function __construct() {
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $db   = getenv('DB_DATABASE');
-        $user = getenv('DB_USERNAME');
-        $pass = getenv('DB_PASSWORD');
-
         try {
-            $this->dbConnection = new \PDO(
-                "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4",
-                $user,
-                $pass
-            );
+            $dbPath = __DIR__ . '/../../cms-db.sqlite';
+
+            $this->dbConnection = new \PDO('sqlite:' . $dbPath);
+
             $this->dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
