@@ -1,3 +1,6 @@
 composer install
+cp .env.example .env
+php artisan key:generate
 touch database/cms-db.sqlite
-php artisan migrate:fresh --seed
+php artisan migrate --seed
+php artisan serve
