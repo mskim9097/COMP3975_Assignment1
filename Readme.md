@@ -1,126 +1,121 @@
-### Setup ###
-Run the following commands ONE BY ONE (do not run them together):
+## Setup (Backend)
 
-cd backend
-composer install
-cp .env.example .env
-php artisan key:generate
-touch database/cms-db.sqlite
-php artisan migrate --seed
-php artisan serve
+Run the following commands ONE BY ONE:
+
+cd backend  
+composer install  
+cp .env.example .env  
+php artisan key:generate  
+touch database/cms-db.sqlite  
+php artisan migrate --seed  
+php artisan serve  
 
 ---
 
-### Seed Account info ###
+## Frontend Setup (React)
+
+Open a new terminal and run:
+
+cd frontend  
+npm install  
+npm run dev  
+
+---
+
+## Application URLs
+
+- Backend: http://127.0.0.1:8000  
+- Frontend: http://localhost:5173  
+
+Make sure the backend server is running BEFORE starting the frontend.
+
+---
+
+## Seed Account Info
+
 Email: a@a.a  
 Password: P@$$w0rd  
 
 ---
 
-### REST API TEST ###
+## REST API Test
 
-Base URL:
+Base URL:  
 http://127.0.0.1:8000/api  
 
 ---
 
-#### 1. For User Table
+### 1. Users
 
-1-1. READ  
+READ  
 GET http://127.0.0.1:8000/api/users  
 GET http://127.0.0.1:8000/api/users/1  
 
----
-
-1-2. CREATE  
+CREATE  
 POST http://127.0.0.1:8000/api/users  
 
-Body → raw → JSON  
+Body (JSON):
 {
   "email": "test1@test.com",
   "password": "1234"
 }
 
-GET http://127.0.0.1:8000/api/users  
-
----
-
-1-3. UPDATE  
+UPDATE  
 PUT http://127.0.0.1:8000/api/users/2  
 
-Body → raw → JSON  
+Body (JSON):
 {
   "email": "test1_changed@test.com",
   "password": "9999"
 }
 
-GET http://127.0.0.1:8000/api/users/2  
-
----
-
-1-4. DELETE  
+DELETE  
 DELETE http://127.0.0.1:8000/api/users/2  
 
 ---
 
-#### 2. For Articles Table
+### 2. Articles
 
-2-1. CREATE  
+CREATE  
 POST http://127.0.0.1:8000/api/articles  
 
-Body → raw → JSON  
+Body (JSON):
 {
   "title": "Test Article 1",
   "content": "This is the first test article."
 }
 
----
-
-2-2. READ  
+READ  
 GET http://127.0.0.1:8000/api/articles  
 GET http://127.0.0.1:8000/api/articles/1  
 
----
-
-2-3. UPDATE  
+UPDATE  
 PUT http://127.0.0.1:8000/api/articles/1  
 
-Body → raw → JSON  
+Body (JSON):
 {
   "title": "Test Article 1 (Updated)",
   "content": "Updated content here."
 }
 
-GET http://127.0.0.1:8000/api/articles/1  
-
----
-
-2-4. DELETE  
+DELETE  
 DELETE http://127.0.0.1:8000/api/articles/1  
 
 ---
 
-### CORS TEST (restricted to GET)
+## CORS Test (GET only)
 
-1. Open a browser and go to:  
+1. Open in browser:  
    http://127.0.0.1:8000/api/users  
-
    → Should return data (GET works)
 
----
-
-2. To test CORS restriction:
-
-   Open test.html in a browser  
-   (e.g., double-click the file or use VS Code Live Server)
-
-   Click the POST button  
-
-   → Should return 405 or be blocked (POST is restricted)
+2. Open test.html in browser and click POST  
+   → Should return 405 or be blocked
 
 ---
 
-### Note:
-- GET requests are allowed from browser  
-- POST / PUT / DELETE are restricted via CORS  
-- All methods still work in Postman
+## Notes
+
+- Frontend fetches data from backend API  
+- Only GET requests are allowed from browser (CORS restriction)  
+- POST / PUT / DELETE work in Postman  

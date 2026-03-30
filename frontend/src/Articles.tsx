@@ -7,9 +7,9 @@ interface ArticleDetailProps {
   onBack: () => void;
 }
 
-interface ArticleFormProps {
-  id?: number;
-  onCancel: () => void;
+interface ArticleListProps {
+  articles: Article[];
+  onDetail: (id: number) => void;
 }
 
 function ArticleDetail({ id, onBack }: ArticleDetailProps) {
@@ -23,89 +23,88 @@ function ArticleDetail({ id, onBack }: ArticleDetailProps) {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div className="text-center py-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
-  if (!article) return <div className="alert alert-danger">Article not found.</div>;
-
-  return (
-    <article className="article-detail mt-5">
-      <h1>{article.title}</h1>
-      <p className="article-date">{new Date(article.created_at).toLocaleDateString()}</p>
-      <hr />
-      <div className="article-content">{article.content}</div>
-      <div className="article-nav">
-        <button className="btn btn-outline-secondary" onClick={onBack}>Back to Articles</button>
-      </div>
-    </article>
-  );
-}
-
-function ArticleForm({ id, onCancel }: ArticleFormProps) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(id ? true : false);
-
-  useEffect(() => {
-    if (!id) return;
-    fetchArticle(id)
-      .then((article) => {
-        setTitle(article.title);
-        setContent(article.content);
-      })
-      .catch(() => onCancel())
-      .finally(() => setLoading(false));
-  }, [id, onCancel]);
-
-  if (loading) return <div className="text-center py-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
-
-  return (
-    <form className="article-form">
-      <h2 className="mb-3">{id ? 'Edit Article' : 'Create Article'}</h2>
-      <div className="mb-3">
-        <label className="form-label">Title</label>
-        <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Content</label>
-        <textarea className="form-control" value={content} onChange={(e) => setContent(e.target.value)} required rows={10} />
-      </div>
-      <div className="d-flex gap-2">
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {id ? 'Save Changes' : 'Create Article'}
-        </button>
-        <button type="button" className="btn btn-outline-secondary" onClick={onCancel}>Cancel</button>
-      </div>
-    </form>
-  );
-}
-
-interface ArticleListProps {
-  articles: Article[];
-  onRefresh: () => void;
-  onDetail: (id: number) => void;
-}
-
-function ArticleList({ articles, onRefresh, onDetail }: ArticleListProps) {
-
-  if (!articles.length) return <div className="empty">No articles yet.</div>;
-
-  return (
-    <div className="list-group mt-5 w-75 mx-auto">
-      {articles.map((article) => (
-        <div key={article.id} className="list-group-item p-4 list-group-item-action d-flex justify-content-between align-items-center">
-          <div>
-            <h5 className="mb-1">
-              <button className="article-link btn btn-link p-0" onClick={() => onDetail(article.id)}>{article.title}</button>
-            </h5>
-            <p className="article-excerpt mb-1">{article.content.substring(0, 150)}...</p>
-            <small className="text-muted">{new Date(article.created_at).toLocaleDateString()}</small>
-          </div>
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
+      </div>
+    );
+  }
+
+  if (!article) {
+    return <div className="alert alert-danger mt-4">Article not found.</div>;
+  }
+
+  return (
+    <section className="article-detail-page container py-5">
+      <button className="back-link mb-4" onClick={onBack}>
+        ← All Articles
+      </button>
+
+      <article className="article-detail-card">
+        <span className="article-badge">Latest Article</span>
+        <h1 className="article-detail-title">{article.title}</h1>
+        <p className="article-date">
+          {new Date(article.created_at).toLocaleDateString()}
+        </p>
+        <div className="article-divider" />
+        <div className="article-content">{article.content}</div>
+      </article>
+    </section>
+  );
+}
+
+function ArticleList({ articles, onDetail }: ArticleListProps) {
+  if (!articles.length) {
+    return <div className="empty-state">No articles yet.</div>;
+  }
+
+  return (
+    <div className="article-grid">
+      {articles.map((article, index) => (
+        <article
+          key={article.id}
+          className={`article-card ${index === 0 ? 'article-card-featured' : ''}`}
+        >
+          <div className="article-card-inner">
+            <div className="article-card-top">
+              <span className="article-tag">{index === 0 ? 'Latest ' : 'Article '}</span>
+              <span className="article-card-date">
+                {new Date(article.created_at).toLocaleDateString()}
+              </span>
+            </div>
+
+            <h2 className="article-card-title">
+              <button
+                className="article-link"
+                onClick={() => onDetail(article.id)}
+              >
+                {article.title}
+              </button>
+            </h2>
+
+            <p className="article-excerpt">
+              {article.content.substring(0, 160)}...
+            </p>
+
+            <div className="article-card-footer">
+              <button
+                className="read-more-btn"
+                onClick={() => onDetail(article.id)}
+              >
+                View Article
+              </button>
+            </div>
+          </div>
+        </article>
       ))}
     </div>
   );
 }
 
-type View = 'list' | 'create' | 'detail' | 'edit';
+type View = 'list' | 'detail';
 
 function Articles() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -141,27 +140,34 @@ function Articles() {
     setView('list');
   };
 
-  if (view === 'create') {
-    return <ArticleForm onCancel={handleBack} />;
-  }
-
   if (view === 'detail' && selectedId) {
     return <ArticleDetail id={selectedId} onBack={handleBack} />;
   }
 
-  if (view === 'edit' && selectedId) {
-    return <ArticleForm id={selectedId} onCancel={handleBack} />;
-  }
-
   return (
-    <div>
-      {loading ? (
-        <div className="text-center py-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>
-      ) : error ? (
-        <div className="alert alert-danger">{error}</div>
-      ) : (
-        <ArticleList articles={articles} onRefresh={loadArticles} onDetail={handleDetail} />
-      )}
+    <div className="articles-page">
+      <section className="hero-section">
+        <div className="container hero-content">
+          <h1 className="hero-title">Latest Articles</h1>
+          <p className="hero-subtitle">
+            Browse the latest updates and articles from Mini-CMS.
+          </p>
+        </div>
+      </section>
+
+      <main className="container py-5">
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="alert alert-danger">{error}</div>
+        ) : (
+          <ArticleList articles={articles} onDetail={handleDetail} />
+        )}
+      </main>
     </div>
   );
 }
