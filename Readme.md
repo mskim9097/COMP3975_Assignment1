@@ -4,10 +4,12 @@ Run the following commands ONE BY ONE:
 
 cd backend  
 composer install  
+npm install  
 cp .env.example .env  
 php artisan key:generate  
 touch database/cms-db.sqlite  
 php artisan migrate --seed  
+npm run build  
 php artisan serve  
 
 ---
@@ -24,8 +26,8 @@ npm run dev
 
 ## Application URLs
 
-- Backend: http://127.0.0.1:8000  
-- Frontend: http://localhost:5173  
+- Laravel Backend / Admin: http://127.0.0.1:8000  
+- React Frontend: http://localhost:5173  
 
 Make sure the backend server is running BEFORE starting the frontend.
 
@@ -119,3 +121,4 @@ DELETE http://127.0.0.1:8000/api/articles/1
 - Frontend fetches data from backend API  
 - Only GET requests are allowed from browser (CORS restriction)  
 - POST / PUT / DELETE work in Postman  
+- Laravel Breeze requires backend assets to be installed and built using npm  

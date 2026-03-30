@@ -15,6 +15,11 @@ class Cors
             return $next($request);
         }
 
+        $origin = $request->headers->get('Origin');
+        $host = $request->getSchemeAndHttpHost();
+
+        $isCrossOrigin = $origin && $origin !== $host;
+
         if ($request->getMethod() === 'OPTIONS') {
             return response('', 200)
                 ->header('Access-Control-Allow-Origin', '*')
@@ -22,9 +27,11 @@ class Cors
                 ->header('Access-Control-Allow-Headers', 'Content-Type');
         }
 
-        if ($request->getMethod() !== 'GET') {
+        if ($isCrossOrigin && $request->getMethod() !== 'GET') {
             return response()->json(['error' => 'CORS restricted to GET'], 405)
-                ->header('Access-Control-Allow-Origin', '*');
+                ->header('Access-Control-Allow-Origin', '*')
+                ->header('Access-Control-Allow-Methods', 'GET')
+                ->header('Access-Control-Allow-Headers', 'Content-Type');
         }
 
         $response = $next($request);

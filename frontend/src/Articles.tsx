@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import DOMPurify from 'dompurify';
 import type { Article } from './types';
 import { fetchArticles, fetchArticle } from './api';
 
@@ -10,6 +11,26 @@ interface ArticleDetailProps {
 interface ArticleListProps {
   articles: Article[];
   onDetail: (id: number) => void;
+}
+
+function sanitizeRichText(html: string): string {
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+  });
+}
+
+function getPlainTextFromHtml(html: string): string {
+  const cleanHtml = sanitizeRichText(html);
+  const temp = document.createElement('div');
+  temp.innerHTML = cleanHtml;
+  return temp.textContent || temp.innerText || '';
+}
+
+function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength).trim() + '...';
 }
 
 function ArticleDetail({ id, onBack }: ArticleDetailProps) {
@@ -37,9 +58,11 @@ function ArticleDetail({ id, onBack }: ArticleDetailProps) {
     return <div className="alert alert-danger mt-4">Article not found.</div>;
   }
 
+  const safeContent = sanitizeRichText(article.content);
+
   return (
     <section className="article-detail-page container py-5">
-      <button className="back-link mb-4" onClick={onBack}>
+      <button type="button" className="back-link mb-4" onClick={onBack}>
         ← All Articles
       </button>
 
@@ -50,7 +73,11 @@ function ArticleDetail({ id, onBack }: ArticleDetailProps) {
           {new Date(article.created_at).toLocaleDateString()}
         </p>
         <div className="article-divider" />
-        <div className="article-content">{article.content}</div>
+
+        <div
+          className="article-content"
+          dangerouslySetInnerHTML={{ __html: safeContent }}
+        />
       </article>
     </section>
   );
@@ -63,43 +90,47 @@ function ArticleList({ articles, onDetail }: ArticleListProps) {
 
   return (
     <div className="article-grid">
-      {articles.map((article, index) => (
-        <article
-          key={article.id}
-          className={`article-card ${index === 0 ? 'article-card-featured' : ''}`}
-        >
-          <div className="article-card-inner">
-            <div className="article-card-top">
-              <span className="article-tag">{index === 0 ? 'Latest ' : 'Article '}</span>
-              <span className="article-card-date">
-                {new Date(article.created_at).toLocaleDateString()}
-              </span>
+      {articles.map((article, index) => {
+        const excerpt = truncateText(getPlainTextFromHtml(article.content), 160);
+
+        return (
+          <article
+            key={article.id}
+            className={`article-card ${index === 0 ? 'article-card-featured' : ''}`}
+          >
+            <div className="article-card-inner">
+              <div className="article-card-top">
+                <span className="article-tag">{index === 0 ? 'Latest ' : 'Article '}</span>
+                <span className="article-card-date">
+                  {new Date(article.created_at).toLocaleDateString()}
+                </span>
+              </div>
+
+              <h2 className="article-card-title">
+                <button
+                  type="button"
+                  className="article-link"
+                  onClick={() => onDetail(article.id)}
+                >
+                  {article.title}
+                </button>
+              </h2>
+
+              <p className="article-excerpt">{excerpt}</p>
+
+              <div className="article-card-footer">
+                <button
+                  type="button"
+                  className="read-more-btn"
+                  onClick={() => onDetail(article.id)}
+                >
+                  View Article
+                </button>
+              </div>
             </div>
-
-            <h2 className="article-card-title">
-              <button
-                className="article-link"
-                onClick={() => onDetail(article.id)}
-              >
-                {article.title}
-              </button>
-            </h2>
-
-            <p className="article-excerpt">
-              {article.content.substring(0, 160)}...
-            </p>
-
-            <div className="article-card-footer">
-              <button
-                className="read-more-btn"
-                onClick={() => onDetail(article.id)}
-              >
-                View Article
-              </button>
-            </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        );
+      })}
     </div>
   );
 }
@@ -116,6 +147,7 @@ function Articles() {
   const loadArticles = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const data = await fetchArticles();
       setArticles(data);
