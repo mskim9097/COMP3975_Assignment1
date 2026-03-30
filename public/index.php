@@ -1,24 +1,20 @@
 <?php
-declare(strict_types=1);
-require_once __DIR__ . "/auth_session.php";
-header("Content-Type: text/html; charset=UTF-8");
-?>
-<!doctype html>
-<html>
 
-<head>
-    <meta charset="utf-8">
-    <title>Mini CMS</title>
-</head>
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 
-<body>
-    <h1>Mini CMS</h1>
-    <p>REST API is running.</p>
-    <ul>
-        <li><a href="/users">GET /users</a></li>
-        <li><a href="/articles">GET /articles</a></li>
-    </ul>
-    <p><a href="/admin">Admin Site</a></p>
-</body>
+define('LARAVEL_START', microtime(true));
 
-</html>
+// Determine if the application is in maintenance mode...
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+// Register the Composer autoloader...
+require __DIR__.'/../vendor/autoload.php';
+
+// Bootstrap Laravel and handle the request...
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+$app->handleRequest(Request::capture());
