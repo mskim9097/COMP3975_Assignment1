@@ -15,7 +15,10 @@
     <div class="container py-4">
         <h1 class="d-flex justify-content-between align-items-center">
             <span>Admin - Mini CMS</span>
-            <a href="/" class="btn btn-outline-secondary btn-sm">Back to Site</a>
+            <form method="POST" action="{{ route('logout') }}" class="mb-0">
+    @csrf
+    <button type="submit" class="btn btn-secondary">Logout</button>
+</form>
         </h1>
         <hr>
         <div class="row">
