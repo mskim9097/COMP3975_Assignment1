@@ -28,7 +28,7 @@ function ArticleDetail({ id, onBack }: ArticleDetailProps) {
   if (!article) return <div className="alert alert-danger">Article not found.</div>;
 
   return (
-    <article className="article-detail">
+    <article className="article-detail mt-5">
       <h1>{article.title}</h1>
       <p className="article-date">{new Date(article.created_at).toLocaleDateString()}</p>
       <hr />
