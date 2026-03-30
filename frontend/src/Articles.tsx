@@ -35,7 +35,7 @@ function ArticleDetail({ id, onBack }: ArticleDetailProps) {
       <div className="article-content">{article.content}</div>
       <div className="article-nav">
         <button className="btn btn-outline-secondary" onClick={onBack}>Back to Articles</button>
-        <button className="btn btn-primary" onClick={() => onBack()}>Edit</button>
+        {/* <button className="btn btn-primary" onClick={() => onBack()}>Edit</button> */}
       </div>
     </article>
   );
@@ -116,9 +116,9 @@ function ArticleList({ articles, onRefresh, onDetail, onEdit }: ArticleListProps
   if (!articles.length) return <div className="empty">No articles yet.</div>;
 
   return (
-    <div className="list-group">
+    <div className="list-group mt-5 w-75 mx-auto">
       {articles.map((article) => (
-        <div key={article.id} className="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <div key={article.id} className="list-group-item p-4 list-group-item-action d-flex justify-content-between align-items-center">
           <div>
             <h5 className="mb-1">
               <button className="article-link btn btn-link p-0" onClick={() => onDetail(article.id)}>{article.title}</button>
@@ -126,10 +126,10 @@ function ArticleList({ articles, onRefresh, onDetail, onEdit }: ArticleListProps
             <p className="article-excerpt mb-1">{article.content.substring(0, 150)}...</p>
             <small className="text-muted">{new Date(article.created_at).toLocaleDateString()}</small>
           </div>
-          <div className="article-actions">
-            <button className="btn btn-sm btn-outline-secondary me-1" onClick={() => onEdit(article.id)}>Edit</button>
-            <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(article.id)}>Delete</button>
-          </div>
+          {/* <div className="article-actions"> */}
+          {/*   <button className="btn btn-sm btn-outline-secondary me-1" onClick={() => onEdit(article.id)}>Edit</button> */}
+          {/*   <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(article.id)}>Delete</button> */}
+          {/* </div> */}
         </div>
       ))}
     </div>
@@ -202,10 +202,10 @@ function Articles() {
 
   return (
     <div>
-      <header className="page-header">
-        <h1>Articles</h1>
-        <button className="btn btn-secondary" onClick={handleCreate}>New Article</button>
-      </header>
+      {/* <header className="page-header"> */}
+      {/*   <h1>Articles</h1> */}
+      {/*   <button className="btn btn-secondary" onClick={handleCreate}>New Article</button> */}
+      {/* </header> */}
       {loading ? (
         <div className="text-center py-4"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>
       ) : error ? (
