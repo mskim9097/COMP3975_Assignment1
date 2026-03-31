@@ -9,6 +9,7 @@ cp .env.example .env
 php artisan key:generate  
 touch database/cms-db.sqlite  
 php artisan migrate --seed  
+php artisan l5-swagger:generate
 npm run build  
 php artisan serve  
 
@@ -37,6 +38,18 @@ Make sure the backend server is running BEFORE starting the frontend.
 
 Email: a@a.a  
 Password: P@$$w0rd  
+
+---
+
+## Swagger API Documentation
+
+After starting the backend server, open:
+
+http://127.0.0.1:8000/api/documentation
+
+This page provides interactive API documentation for:
+- Users endpoints
+- Articles endpoints
 
 ---
 
