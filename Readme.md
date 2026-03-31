@@ -2,16 +2,16 @@
 
 Run the following commands ONE BY ONE:
 
-cd backend  
-composer install  
-npm install  
-cp .env.example .env  
-php artisan key:generate  
-touch database/cms-db.sqlite  
-php artisan migrate --seed  
+cd backend
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+touch database/cms-db.sqlite
+php artisan migrate --seed
 php artisan l5-swagger:generate
-npm run build  
-php artisan serve  
+npm run build
+php artisan serve
 
 ---
 
